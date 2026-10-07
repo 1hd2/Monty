@@ -1,6 +1,7 @@
 import argparse
+import random
 
-# 1. Define arguments, generate seed
+# 1. Get parameters
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--doors", type=int, default=3, 
                     help="The number of doors in each round (default = 3).")
@@ -25,17 +26,29 @@ parser.add_argument("-i", "--iterations", type=int, default=100,
                     help="The number of iterations (rounds) in this simulation (default=100).")
 parser.add_argument("-v", "--verbose", action='store_true',
                     help="Activates verbose output mode (default=off).")
+parser.add_argument("-s", "--seed", type=str,
+                     help="The seed used for randomisation")
 
 args = parser.parse_args()
+
+# 2. Setup game (Generate randomised arrays representing doors)
+if args.seed != None:
+    random.seed(args.seed)
+else:
+    random.seed()
+iteration_template = []
+for i in range(args.outcomes):
+    iteration_template.append(i)
+while len(iteration_template) < args.doors:
+    iteration_template.append(0)
+# setup a list with the different types of outcome
+# shuffle and append to a list of iterations
+# 
 print(args)
-# 2. Get parameters (Take command line parameters, return a dict of parameters)
+print(iteration_template)
+
+# 3. Simulate game (For each array, randomise player behaviour, host response, and player response)
 
 
-# 3. Setup game (Take a dict, return a list of lists)
-
-
-# 4. Simulate game (Take a list of lists and a dict, run the game based on dict parameters on each list within list)
-
-
-# 5. Report game results (print)
+# 4. Report game results (print)
 
