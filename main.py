@@ -1,5 +1,6 @@
 import argparse
 import random
+from generate import generate_iterations
 
 # 1. Get parameters
 parser = argparse.ArgumentParser()
@@ -41,11 +42,15 @@ for i in range(args.outcomes):
     iteration_template.append(i)
 while len(iteration_template) < args.doors:
     iteration_template.append(0)
+
+
 # setup a list with the different types of outcome
 # shuffle and append to a list of iterations
-# 
 print(args)
-print(iteration_template)
+print(f"generating {args.iterations} iterations of {iteration_template}...")
+iterations = generate_iterations(args.iterations, iteration_template)
+for i in iterations:
+    print(i)
 
 # 3. Simulate game (For each array, randomise player behaviour, host response, and player response)
 
