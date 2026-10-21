@@ -1,6 +1,6 @@
 import argparse
 import random
-from generate import generate_iterations, generate_preferences
+from generate import generate_iterations
 from simulate import play_game
 
 # 1. Get parameters
@@ -20,9 +20,9 @@ parser.add_argument("-g", "--game", type=int, choices=[0,1], default=0,
 parser.add_argument("-p", "--player", type=int, choices=[0,1,2], default=0,
                     help='''
                     The behaviour mode of the game player (default=0): \n
-                    0 = The player always switches to another door after the host reveals a losing door \n
-                    1 = The player never switches to another door \n 
-                    2 = The game is played manually 
+                    0 = The game is played manually \n
+                    1 = The player always switches to another door after the host reveals a losing door \n
+                    2 = The player never switches to another door \n
                     ''')
 parser.add_argument("-i", "--iterations", type=int, default=100,
                     help="The number of iterations (rounds) in this simulation (default=100).")
@@ -53,14 +53,14 @@ print(args)
 print(f"generating {args.iterations} iterations of {iteration_template}...")
 iterations = generate_iterations(args.iterations, iteration_template)
 
-print(f"generating {args.iterations} preferences...")
-preferences = generate_preferences(args.iterations, args.doors)
-
-for i in range(args.iterations):
-    print(i, iterations[i], preferences[i])
 
 # 3. Simulate game (For each array, randomise player behaviour, host response, and player response)
-play_game(args.reveal, args.game, args.player, iterations, preferences)
+serial = 0
+for iteration in iterations:
+    print(f"----- START ROUND {serial}: {iteration}")
+    serial += 1
+    play_game(args.reveal, args.game, args.player, iteration)
+# print outcomes after each game
 
-# 4. Report game results (print)
+# 4. Aggregate game results (print)
 

@@ -1,46 +1,57 @@
 import random
 
-def play_game(reveal: int, host: int, player:int, 
-              iterations: list, preferences: list) -> list:
-    if player == 2:
+def play_game(reveal: int, host: int, 
+              player:int, doors: list) -> list:
+    if player == 0:
         return None
-    for iteration in range(0, len(iterations)):
-        player_choice = preferences[iteration][0]
-        revealed_doors = []
-        empty_doors = []
-        for door in range(0,len(iterations[iteration])):
-            if iterations[iteration][door] == 0:
-                empty_doors.append(door)
+    player_choice = random.randrange(len(doors))
+    revealed_doors = {}
+    unrevealed_doors = generate_unrevealed(doors)
+    empty_doors = []
+    for i in range(len(doors)):
+        if doors[i] == 0:
+            empty_doors.append(i)
 
-        print(f"-----START ROUND {iteration}-----")
-        print(f"Doors are: {iterations[iteration]}")
-        print(f"Player's initial choice is {player_choice}")
+    print(f"Player's initial choice is {player_choice} \n")
 
-        for i in range(0, reveal):
-            match host:
-                case 0:
-                    if player_choice in empty_doors:
-                        empty_doors.remove(player_choice)
-                        revealed_door = random.choice(empty_doors)
-                        print(f"Revealing door number {revealed_door}...")
-                        revealed_doors.append(revealed_door)
-                        empty_doors.append(player_choice)
-                    else: 
-                        revealed_door = random.choice(empty_doors)
-                        print(f"Revealing door number {revealed_door}...")
-                        revealed_doors.append(revealed_door)
-                                                
-                case 1:
-                    revealed_door = random.rangerange(len(iteration))
-                    print(f"Revealing door number {revealed_door} at random...")
+    for i in range(0, reveal):
+        print(f"Revealed doors: {revealed_doors}")
+        print(f"Unrevealed doors: {unrevealed_doors}")
+        print(f"Empty doors: {empty_doors} \n")
+        match host:
+            case 0:
+                revealed_door = reveal_losing_door(player_choice, doors, revealed_doors)
+                if player_choice in empty_doors:
+                    empty_doors.remove(player_choice)
+                    revealed_door = random.choice(empty_doors)
+                    print(f"Revealing door number {revealed_door}...")
+                    revealed_doors.append(revealed_door)
+                    empty_doors.append(player_choice)
+                else: 
+                    revealed_door = random.choice(empty_doors)
+                    print(f"Revealing door number {revealed_door}...")
                     revealed_doors.append(revealed_door)
             
-            match player:
-                case 0:
-                    preferences[iteration].pop(0)
-                    for door in revealed_doors:
-                        if door in preferences[iteration]:
-                            preferences[iteration].remove(door)
-                    print(f"The player changes his decision to {preferences[iteration][0]}...")
-                case 1:
-                    print(f"The player does not change his decision...")
+            case 1:
+                revealed_door = random.rangerange(len(iteration))
+                print(f"Revealing door number {revealed_door} at random...")
+                revealed_doors.append(revealed_door)
+        
+        match player:
+            case 1:
+
+                print(f"The player changes his decision to ...")
+            case 2:
+                print(f"The player does not change his decision...")
+
+def generate_unrevealed(doors: list) -> list:
+    unrevealed_doors = []
+    for i in range(0, len(doors)):
+        unrevealed_doors.append(i)
+    return unrevealed_doors
+
+def reveal_losing_door(player_choice: int, empty_doors: list, unrevealed_doors: list) -> int:
+    available_doors = unrevealed_doors.copy()
+    for door_number in available_doors:
+        if door_number not in empty_doors:
+            available_doors.remove(door_number)
