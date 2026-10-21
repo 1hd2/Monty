@@ -1,13 +1,14 @@
 import argparse
 import random
 from generate import generate_iterations, generate_preferences
+from simulate import play_game
 
 # 1. Get parameters
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--doors", type=int, default=3, 
                     help="The number of doors in each round (default = 3).")
-parser.add_argument("-o", "--outcomes", type=int, default=2,
-                    help="The number of outcomes in each round (default = 2).")
+parser.add_argument("-w", "--wins", type=int, default=1,
+                    help="The number of winning outcomes in each round (default = 1).")
 parser.add_argument("-r", "--reveal", type=int, default=1,
                     help="The number of doors to be revealed in each round (default = 1).")
 parser.add_argument("-g", "--game", type=int, choices=[0,1], default=0, 
@@ -38,14 +39,15 @@ if args.seed != None:
 else:
     random.seed()
 iteration_template = []
-for i in range(args.outcomes):
-    iteration_template.append(i)
+for i in range(args.wins):
+    iteration_template.append(i+1)
 while len(iteration_template) < args.doors:
     iteration_template.append(0)
 
 
 # setup a list with the different types of outcome
 # shuffle and append to a list of iterations
+# below is all debugging print
 print(args)
 
 print(f"generating {args.iterations} iterations of {iteration_template}...")
@@ -58,7 +60,7 @@ for i in range(args.iterations):
     print(i, iterations[i], preferences[i])
 
 # 3. Simulate game (For each array, randomise player behaviour, host response, and player response)
-
+play_game(args.reveal, args.game, args.player, iterations, preferences)
 
 # 4. Report game results (print)
 
