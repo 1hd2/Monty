@@ -7,7 +7,7 @@ def play_game(reveal: int, host: int,
     player_choice = random.randrange(len(doors))
     revealed_doors = {}
     unrevealed_doors = generate_unrevealed(doors)
-    empty_doors = []
+    empty_doors = {}
     for i in range(len(doors)):
         if doors[i] == 0:
             empty_doors.append(i)
@@ -44,13 +44,13 @@ def play_game(reveal: int, host: int,
             case 2:
                 print(f"The player does not change his decision...")
 
-def generate_unrevealed(doors: list) -> list:
+def generate_unrevealed(doors: list) -> set:
     unrevealed_doors = []
     for i in range(0, len(doors)):
         unrevealed_doors.append(i)
     return unrevealed_doors
 
-def reveal_losing_door(player_choice: int, empty_doors: list, unrevealed_doors: list) -> int:
+def reveal_losing_door(player_choice: int, empty_doors: set, unrevealed_doors: set) -> set:
     available_doors = unrevealed_doors.copy()
     for door_number in available_doors:
         if door_number not in empty_doors:
